@@ -451,6 +451,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := update_engine_sideload
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
+$(info $(shell (touch $(TARGET_RECOVERY_ROOT_OUT)/sbin/update_engine_sideload_cosmicmod)))
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_CPP_EXTENSION := .cc
 LOCAL_CLANG := true
