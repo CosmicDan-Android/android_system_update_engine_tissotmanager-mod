@@ -27,6 +27,7 @@
 #include <brillo/data_encoding.h>
 #include <brillo/message_loops/message_loop.h>
 #include <brillo/strings/string_utils.h>
+#include <cutils/properties.h>
 #include <cutils/sched_policy.h>
 #include <log/log.h>
 
@@ -183,7 +184,12 @@ bool UpdateAttempterAndroid::ApplyPayload(
     }
   }
   install_plan_.source_slot = boot_control_->GetCurrentSlot();
-  install_plan_.target_slot = install_plan_.source_slot == 0 ? 1 : 0;
+  // CosmicDan - Tissot Manager option to install to current slot
+  if (property_get_bool("tissotmanager.payload.sameslot", 0)) {
+    install_plan_.target_slot = install_plan_.source_slot;
+  } else {
+    install_plan_.target_slot = install_plan_.source_slot == 0 ? 1 : 0;
+  }
 
   int data_wipe = 0;
   install_plan_.powerwash_required =
