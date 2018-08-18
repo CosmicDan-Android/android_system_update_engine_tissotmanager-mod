@@ -17,6 +17,7 @@
 #include "update_engine/payload_consumer/payload_verifier.h"
 
 #include <base/logging.h>
+#include <cutils/properties.h>
 #include <openssl/pem.h>
 
 #include "update_engine/common/hash_calculator.h"
@@ -121,6 +122,11 @@ bool PayloadVerifier::VerifySignature(const brillo::Blob& signature_blob,
   LOG(ERROR) << "But found decrypted hashes:";
   for (const auto& sig_hash_data : tested_hashes) {
     utils::HexDumpVector(sig_hash_data);
+  }
+  // CosmicDan - Tissot Manager option to ignore payload verification 
+  if (property_get_bool("tissotmanager.payload.ignoreverify", 0)) {
+	LOG(WARNING) << "[!] Payload verification failed - ignoring!";
+	return true;
   }
   return false;
 }
